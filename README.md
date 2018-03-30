@@ -56,4 +56,4 @@ Using a demo from [sklearn AdaBoost](http://scikit-learn.org/stable/modules/gene
 ## Author
 [Donny](https://github.com/Donny-Hikari)
 
-Find out further information, refer to [AdaBoost - Donny](http://konno-yuuki.com/blog/posts/machinelearning/2018/654416/).
+Find out further information, refer to my blog [AdaBoost - Donny](http://konno-yuuki.com/blog/posts/machinelearning/2018/654416/) (In Chinese).
