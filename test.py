@@ -66,7 +66,7 @@ yPred = bdt.predict(X)
 print("accuracy:", np.sum(yPred == y)/y.size)
 
 # Plot the two-class decision scores
-twoclass_output = yPred # bdt.decision_function(X)
+twoclass_output = bdt.weightedSum(X) # bdt.decision_function(X)
 plot_range = (twoclass_output.min(), twoclass_output.max())
 plt.subplot(122)
 for i, n, c in zip(range(2), class_names, plot_colors):

@@ -120,14 +120,32 @@ class AdaBoostClassifier:
             The predict result of the testing samples.
         """
 
+        hsum = self.weightedSum(test_set_)
+
+        yPred = np.sign(hsum)
+        yPred[yPred == -1] = 0
+        return yPred
+
+    def weightedSum(self, test_set_):
+        """Return the weighted sum of all weak classifiers
+
+        Parameters
+        ----------
+        test_set_ : array-like of shape = [n_samples, n_features]
+            The inputs of the testing samples.
+
+        Returns
+        -------
+        hSum : np.array of shape = [n_samples]
+            The predict result of the testing samples.
+        """
+
         test_set = np.array(test_set_)
 
         assert test_set.shape[1] == self.features
 
-        sumv = 0
+        hsum = 0
         for i in range(self.nWC):
-            sumv = sumv + self.alpha[i] * self.WCs[i].predict(test_set)
+            hsum = hsum + self.alpha[i] * self.WCs[i].predict(test_set)
 
-        yPred = np.sign(sumv)
-        yPred[yPred == -1] = 0
-        return yPred
+        return hsum
