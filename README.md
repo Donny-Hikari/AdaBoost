@@ -46,7 +46,7 @@ Using a demo from [sklearn AdaBoost](http://scikit-learn.org/stable/modules/gene
 
 ![Result for my AdaBoost](doc/img/result-2.png)
 
-## Reference
+## References / Acknowledgement
 
 1. [AdaBoost - Wikipedia](https://en.wikipedia.org/wiki/AdaBoost)
 2. [AdaBoost -- 从原理到实现](https://blog.csdn.net/Dark_Scope/article/details/14103983)
