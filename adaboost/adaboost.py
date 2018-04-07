@@ -118,13 +118,17 @@ class AdaBoostClassifier:
         -------
         yPred : np.array of shape = [n_samples]
             The predict result of the testing samples.
+        CI : np.array of shape = [n_samples]
+            The confidence of the predict results.
         """
 
         hsum = self.weightedSum(test_set_)
+        CI = abs(hsum) / np.sum(self.alpha)
 
         yPred = np.sign(hsum)
         yPred[yPred == -1] = 0
-        return yPred
+
+        return yPred, CI
 
     def weightedSum(self, test_set_):
         """Return the weighted sum of all weak classifiers

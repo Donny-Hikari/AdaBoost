@@ -27,23 +27,23 @@ X, y = shuffle(X, y, random_state=1)
 #                          n_estimators=200)
 # bdt.fit(X, y)
 
-bdt = AdaBoostClassifier(200, DecisionStumpClassifier(200))
+bdt = AdaBoostClassifier(60, DecisionStumpClassifier(60))
 bdt.train(X, y)
 
 plot_colors = "br"
 plot_step = 0.02
 class_names = "AB"
 
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(15, 5))
 
 # Plot the decision boundaries
-plt.subplot(121)
+plt.subplot(131)
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, plot_step),
                      np.arange(y_min, y_max, plot_step))
 
-Z = bdt.predict(np.c_[xx.ravel(), yy.ravel()])
+Z, _ = bdt.predict(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
 cs = plt.contourf(xx, yy, Z, cmap=plt.cm.Paired)
 plt.axis("tight")
@@ -62,13 +62,13 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Decision Boundary')
 
-yPred = bdt.predict(X)
+yPred, CI = bdt.predict(X)
 print("accuracy:", np.sum(yPred == y)/y.size)
 
 # Plot the two-class decision scores
 twoclass_output = bdt.weightedSum(X) # bdt.decision_function(X)
 plot_range = (twoclass_output.min(), twoclass_output.max())
-plt.subplot(122)
+plt.subplot(132)
 for i, n, c in zip(range(2), class_names, plot_colors):
     plt.hist(twoclass_output[y == i],
              bins=10,
@@ -83,6 +83,22 @@ plt.legend(loc='upper right')
 plt.ylabel('Samples')
 plt.xlabel('Score')
 plt.title('Decision Scores')
+
+# Plot the two-class confidence
+confidence = CI # bdt.decision_function(X)
+plot_range = (confidence.min(), confidence.max())
+plt.subplot(133)
+plt.hist(confidence,
+         bins=10,
+         range=plot_range,
+         facecolor='b',
+         alpha=.5,
+         edgecolor='k')
+x1, x2, y1, y2 = plt.axis()
+plt.axis((x1, x2, y1, y2 * 1.2))
+plt.ylabel('Samples')
+plt.xlabel('Confidence')
+plt.title('Confidence Distrubution')
 
 plt.tight_layout()
 plt.subplots_adjust(wspace=0.35)
