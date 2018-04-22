@@ -2,13 +2,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# from sklearn.ensemble import AdaBoostClassifier
-# from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import make_gaussian_quantiles
 from sklearn.utils import shuffle
 
-# from adaboost import AdaboostClassifier
-from adaboost import AdaBoostClassifier, DecisionStumpClassifier
+Use_Sklearn_AdaBoost=False
+
+if Use_Sklearn_AdaBoost:
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.tree import DecisionTreeClassifier
+else:
+    from adaboost import AdaBoostClassifier, DecisionStumpClassifier
 
 X1, y1 = make_gaussian_quantiles(cov=2.,
                                  n_samples=200, n_features=2,
@@ -22,19 +25,20 @@ y = np.concatenate((y1, 1 - y2))
 
 X, y = shuffle(X, y, random_state=1)
 
-# bdt = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-#                          algorithm="SAMME",
-#                          n_estimators=200)
-# bdt.fit(X, y)
-
-bdt = AdaBoostClassifier(60, DecisionStumpClassifier(60))
-bdt.train(X, y)
+if Use_Sklearn_AdaBoost:
+    bdt = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            algorithm="SAMME",
+                            n_estimators=200)
+    bdt.fit(X, y)
+else:
+    bdt = AdaBoostClassifier(60, DecisionStumpClassifier(60))
+    bdt.train(X, y)
 
 plot_colors = "br"
 plot_step = 0.02
 class_names = "AB"
 
-plt.figure(figsize=(15, 5))
+fig = plt.figure(figsize=(15, 5))
 
 # Plot the decision boundaries
 plt.subplot(131)
@@ -42,8 +46,10 @@ x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, plot_step),
                      np.arange(y_min, y_max, plot_step))
-
-Z, _ = bdt.predict(np.c_[xx.ravel(), yy.ravel()])
+if Use_Sklearn_AdaBoost:
+    Z = bdt.predict(np.c_[xx.ravel(), yy.ravel()])
+else:
+    Z, _ = bdt.predict(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
 cs = plt.contourf(xx, yy, Z, cmap=plt.cm.Paired)
 plt.axis("tight")
@@ -62,11 +68,24 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Decision Boundary')
 
-yPred, CI = bdt.predict(X)
-print("accuracy:", np.sum(yPred == y)/y.size)
+if Use_Sklearn_AdaBoost:
+    yPred = bdt.predict(X)
+    CI = bdt.predict_proba(X)
+else:
+    yPred, CI = bdt.predict(X)
+
+accuracy = np.mean(yPred == y)
+
+if Use_Sklearn_AdaBoost:
+    fig.canvas.set_window_title('Sklearn AdaBoost Test - accuracy: %0.3f' % accuracy)
+else:
+    fig.canvas.set_window_title('AdaBoost Test - accuracy: %0.3f' % accuracy)
 
 # Plot the two-class decision scores
-twoclass_output = bdt.weightedSum(X) # bdt.decision_function(X)
+if Use_Sklearn_AdaBoost:
+    twoclass_output = bdt.decision_function(X)
+else:
+    twoclass_output = bdt.weightedSum(X)
 plot_range = (twoclass_output.min(), twoclass_output.max())
 plt.subplot(132)
 for i, n, c in zip(range(2), class_names, plot_colors):

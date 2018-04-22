@@ -42,9 +42,23 @@ Z is a normalization factor.
 
 Using a demo from [sklearn AdaBoost](http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html), I got the following result.
 
-![Result for my AdaBoost](doc/img/result-1.png)
+Weak classifiers: 200; Iteration steps in each weak classifier: 200:
 
-![Result for my AdaBoost](doc/img/result-2.png)
+![Result of my AdaBoost, 200-200](doc/img/result-200-200.png)
+
+Weak classifiers: 60; Iteration steps in each weak classifier: 60:
+
+![Result of my AdaBoost, 60-60](doc/img/result-60-60.png)
+
+Weak classifiers: 400; Iteration steps in each weak classifier: 400:
+
+![Result of my AdaBoost, 400-400](doc/img/result-400-400.png)
+
+We can see the result varies as the number of weak classifiers and the iteration steps change.
+
+Compares with the AdaBoostClassifier from sklearn with 200 estimators (weak classifiers):
+
+![Result of sklearn AdaBoost, 200](doc/img/result-sklearn.png)
 
 ## References / Acknowledgement
 
