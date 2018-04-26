@@ -125,7 +125,7 @@ class AdaBoostClassifier:
         """
 
         hsum = self.weightedSum(test_set_)
-        CI = abs(hsum) / np.sum(self.alpha)
+        CI = abs(hsum) / np.sum(abs(self.alpha))
 
         yPred = np.sign(hsum)
         yPred[yPred == -1] = 0

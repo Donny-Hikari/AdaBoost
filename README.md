@@ -60,6 +60,27 @@ Compares with the AdaBoostClassifier from sklearn with 200 estimators (weak clas
 
 ![Result of sklearn AdaBoost, 200](doc/img/result-sklearn.png)
 
+More comparison for my AdaBoostClassifier with different parameters:
+
+| estimators | iteration steps |  time | accuracy |
+|-----------:|----------------:|------:|---------:|
+|30          |30               | 0.0621|0.8540    |
+|30          |60               | 0.1095|0.8760    |
+|30          |200              | 0.3725|0.8620    |
+|30          |400              | 0.7168|0.8720    |
+|60          |30               | 0.1291|0.8620    |
+|60          |60               | 0.2328|0.8600    |
+|60          |200              | 0.7886|0.8780    |
+|60          |400              | 1.4679|0.8840    |
+|200         |30               | 0.3942|0.8600    |
+|200         |60               | 0.7560|0.8700    |
+|200         |200              | 2.4925|0.8900    |
+|200         |400              | 4.7178|0.9020    |
+|400         |30               | 0.8758|0.8640    |
+|400         |60               | 1.6578|0.8720    |
+|400         |200              | 5.0294|0.9040    |
+|400         |400              |10.0294|0.9260    |
+
 ## References / Acknowledgement
 
 1. [AdaBoost - Wikipedia](https://en.wikipedia.org/wiki/AdaBoost)
@@ -70,4 +91,4 @@ Compares with the AdaBoostClassifier from sklearn with 200 estimators (weak clas
 ## Author
 [Donny](https://github.com/Donny-Hikari)
 
-Find out further information, refer to my blog [AdaBoost - Donny](http://konno-yuuki.com/blog/posts/machinelearning/2018/654416/) (In Chinese).
+Find out further information, refer to my blog [AdaBoost - Donny](http://konno-yuuki.com/blog/posts/machinelearning/2018/654416/) (In Chinese & English).

@@ -5,7 +5,11 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_gaussian_quantiles
 from sklearn.utils import shuffle
 
-Use_Sklearn_AdaBoost=False
+import time
+
+Use_Sklearn_AdaBoost = False
+Estimators = 60
+Iteration_Steps = 60
 
 if Use_Sklearn_AdaBoost:
     from sklearn.ensemble import AdaBoostClassifier
@@ -25,14 +29,18 @@ y = np.concatenate((y1, 1 - y2))
 
 X, y = shuffle(X, y, random_state=1)
 
+trainning_time = 0
 if Use_Sklearn_AdaBoost:
     bdt = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                             algorithm="SAMME",
                             n_estimators=200)
     bdt.fit(X, y)
 else:
-    bdt = AdaBoostClassifier(60, DecisionStumpClassifier(60))
+    bdt = AdaBoostClassifier(Estimators, DecisionStumpClassifier(Iteration_Steps))
+    tbegin = time.time()
     bdt.train(X, y)
+    tend = time.time()
+    trainning_time = tend - tbegin
 
 plot_colors = "br"
 plot_step = 0.02
@@ -54,7 +62,7 @@ Z = Z.reshape(xx.shape)
 cs = plt.contourf(xx, yy, Z, cmap=plt.cm.Paired)
 plt.axis("tight")
 
-# Plot the training points
+# Plot the trainning points
 for i, n, c in zip(range(2), class_names, plot_colors):
     idx = np.where(y == i)
     plt.scatter(X[idx, 0], X[idx, 1],
@@ -79,7 +87,9 @@ accuracy = np.mean(yPred == y)
 if Use_Sklearn_AdaBoost:
     fig.canvas.set_window_title('Sklearn AdaBoost Test - accuracy: %0.3f' % accuracy)
 else:
-    fig.canvas.set_window_title('AdaBoost Test - accuracy: %0.3f' % accuracy)
+    fig.canvas.set_window_title('AdaBoost Test' + ' - '
+        + 'estimators: %d, iteration steps: %d, accuracy: %0.3f, trainning time: %0.4f' %
+        (Estimators, Iteration_Steps, accuracy, trainning_time))
 
 # Plot the two-class decision scores
 if Use_Sklearn_AdaBoost:
